@@ -321,6 +321,37 @@ a.button,
   }
 }
 
+.not-found {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 1rem;
+  min-height: calc(100svh - 8rem);
+  padding: clamp(6rem, 12vw, 10rem) clamp(1rem, 4vw, 3rem) 4rem;
+  text-align: center;
+}
+
+.not-found-code {
+  margin: 0;
+  color: var(--lime);
+  font-size: clamp(6rem, 20vw, 14rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-shadow: 0 0 3rem rgba(166, 255, 79, 0.2);
+  animation: titlePulse 6s ease-in-out infinite;
+}
+
+.not-found h1 {
+  font-size: clamp(1.8rem, 5vw, 3.5rem);
+}
+
+.not-found p:not(.not-found-code) {
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 2vw, 1.25rem);
+}
+
 .button:hover {
   transform: translateY(-2px);
   background: #caff8f;
