@@ -306,7 +306,8 @@ h2 {
   transition: transform 180ms ease, background 180ms ease;
 }
 
-a.button {
+a.button,
+#mailto-fallback {
   color: #050505;
 }
 
