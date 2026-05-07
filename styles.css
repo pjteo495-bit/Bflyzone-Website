@@ -821,6 +821,56 @@ footer p {
   font-weight: 700;
 }
 
+.label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mic-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.mic-btn:hover {
+  border-color: rgba(166, 255, 79, 0.4);
+  color: var(--text);
+}
+
+.mic-btn.recording {
+  border-color: rgba(255, 50, 30, 0.55);
+  background: rgba(255, 50, 30, 0.1);
+  color: var(--red);
+  animation: micPulse 1.2s ease-in-out infinite;
+}
+
+.mic-btn svg {
+  width: 0.85rem;
+  height: 0.85rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@keyframes micPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
 .commission-status {
   display: inline-flex;
   align-items: center;
