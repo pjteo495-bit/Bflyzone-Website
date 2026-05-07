@@ -801,10 +801,6 @@ textarea:focus {
   margin-top: 0.35rem;
 }
 
-.actions a {
-  color: var(--muted);
-  font-weight: 800;
-}
 
 footer {
   display: flex;
