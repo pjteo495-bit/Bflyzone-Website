@@ -873,7 +873,11 @@ footer p {
 
   nav {
     flex-wrap: wrap;
-    gap: 0.7rem;
+    gap: 0.5rem;
+  }
+
+  nav a {
+    font-size: 0.78rem;
   }
 
   .social-rail {
@@ -892,11 +896,11 @@ footer p {
   }
 
   h1 {
-    font-size: clamp(4rem, 20vw, 6rem);
+    font-size: clamp(2.8rem, 15.5vw, 4.5rem);
   }
 
   h2 {
-    font-size: clamp(3rem, 16vw, 4.25rem);
+    font-size: clamp(2.4rem, 13vw, 4.25rem);
   }
 
   .hero::after {
@@ -905,7 +909,6 @@ footer p {
       linear-gradient(90deg, rgba(5, 5, 5, 0.62), transparent);
   }
 
-  .insta-grid,
   .info-links {
     grid-template-columns: 1fr;
   }
