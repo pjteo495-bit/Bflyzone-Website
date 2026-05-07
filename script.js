@@ -79,6 +79,22 @@ if (form) {
   });
 }
 
+const requestSection = document.querySelector("#request");
+
+if (requestSection) {
+  document.querySelectorAll('a[href="#request"]').forEach((a) => {
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      requestSection.scrollIntoView({ behavior: "smooth" });
+    });
+  });
+
+  if (window.location.hash === "#request") {
+    history.replaceState(null, "", "/");
+    requestSection.scrollIntoView({ behavior: "instant" });
+  }
+}
+
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => {
     const filter = tab.dataset.filter;
