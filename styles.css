@@ -821,6 +821,40 @@ footer p {
   font-weight: 700;
 }
 
+.commission-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.commission-status::before {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.commission-status.open {
+  border: 1px solid rgba(166, 255, 79, 0.4);
+  background: rgba(166, 255, 79, 0.1);
+  color: var(--lime);
+}
+
+.commission-status.closed {
+  border: 1px solid rgba(255, 50, 30, 0.4);
+  background: rgba(255, 50, 30, 0.1);
+  color: var(--red);
+}
+
 @media (max-width: 920px) {
   .request {
     grid-template-columns: 1fr;
