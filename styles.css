@@ -311,6 +311,16 @@ a.button,
   color: #050505;
 }
 
+#mailto-fallback {
+  display: none;
+}
+
+@media (max-width: 920px) {
+  #mailto-fallback {
+    display: inline-flex;
+  }
+}
+
 .button:hover {
   transform: translateY(-2px);
   background: #caff8f;
