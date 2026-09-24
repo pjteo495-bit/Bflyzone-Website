@@ -88,7 +88,7 @@ if (requestBar && form && 'IntersectionObserver' in window) {
   if (dialog) new MutationObserver(updateBar).observe(dialog, { attributes: true, attributeFilter: ['open'] });
 }
 
-document.querySelectorAll('.post').forEach((post) => {
+document.querySelectorAll('.post, .art-preview').forEach((post) => {
   post.addEventListener('click', () => {
     document.querySelector('#dialog-image').src = post.dataset.src;
     document.querySelector('#dialog-image').alt = post.querySelector('img').alt;
