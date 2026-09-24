@@ -21,7 +21,13 @@ p { color: var(--muted); }
 .skip-link:focus { transform: none; }
 .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 76px; padding: .75rem max(1.5rem, calc((100% - 1120px) / 2)); border-bottom: 1px solid var(--line); background: rgba(9, 13, 24, .97); }
 .handle-mark { display: flex; align-items: center; gap: .65rem; font-weight: 800; font-size: 1.2rem; letter-spacing: -.04em; }
-.handle-mark span { color: var(--accent); font-size: 1.7rem; line-height: 1; }
+.brand-mascot { flex-shrink: 0; width: 44px; height: 44px; border: 1px solid var(--accent); border-radius: 50%; object-fit: cover; }
+.mascot-intro { display: flex; align-items: center; gap: .9rem; margin-bottom: 1.4rem; }
+.mascot-portrait { flex-shrink: 0; padding: 0; border: 1px solid var(--accent); border-radius: 50%; overflow: hidden; background: var(--panel); box-shadow: 0 0 24px #c0adff18; }
+.mascot-portrait img { width: 72px; height: 72px; object-fit: cover; }
+.hero .mascot-name { margin: 0 0 .25rem; color: var(--text); font-size: .9rem; font-weight: 700; }
+.mascot-name span { margin-left: .3rem; color: var(--accent); }
+.mascot-intro .commission-status { margin: 0; }
 nav { display: flex; align-items: center; flex-wrap: wrap; gap: 1.3rem; }
 nav a { display: inline-flex; align-items: center; min-height: 44px; font-size: .85rem; font-weight: 600; }
 nav a:hover, .text-link:hover, .form-links a:hover { color: var(--accent); }
@@ -134,8 +140,10 @@ footer nav a, footer p { font-size: .73rem; color: var(--muted); }
   html { scroll-padding-top: 5.5rem; }
   .section-wrap, .hero, .page-main { width: calc(100% - 2rem); }
   .topbar { min-height: 64px; padding: .5rem 1rem; gap: .5rem; }
-  .handle-mark { font-size: 1rem; gap: .3rem; }
-  .handle-mark span { font-size: 1.3rem; }
+  .handle-mark { font-size: .875rem; gap: .4rem; }
+  .brand-mascot { width: 32px; height: 32px; }
+  .mascot-intro { gap: .75rem; margin-bottom: 1rem; }
+  .mascot-portrait img { width: 60px; height: 60px; }
   .topbar nav { gap: .85rem; }
   .topbar nav a { font-size: .75rem; }
   .nav-request { padding-inline: .7rem; gap: .55rem; }

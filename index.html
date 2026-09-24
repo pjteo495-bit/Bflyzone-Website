@@ -61,12 +61,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="preload" as="image" href="assets/collection/umbreon-moon.webp">
-    <link rel="stylesheet" href="styles.css?v=6">
+    <link rel="stylesheet" href="styles.css?v=7">
   </head>
   <body class="home">
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="topbar">
-      <a class="handle-mark" href="/" aria-label="Bflyzone home">BFLYZONE<span aria-hidden="true">✳</span></a>
+      <a class="handle-mark" href="/" aria-label="Bflyzone home"><img class="brand-mascot" src="/assets/brand/mika-profile-7.webp" alt="" width="44" height="44">BFLYZONE</a>
       <nav aria-label="Primary navigation">
         <a href="/#work">Work</a>
         <a class="nav-request" href="/#request">Request art <span aria-hidden="true">↗</span></a>
@@ -76,7 +76,12 @@
     <main id="main">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <span class="commission-status">Commissions open</span>
+          <div class="mascot-intro">
+            <button class="art-preview mascot-portrait" type="button" data-title="Mika &mdash; the face of Bflyzone" data-src="assets/brand/mika-profile-7.webp" aria-label="Meet Mika: preview the Bflyzone mascot">
+              <img src="assets/brand/mika-profile-7.webp" alt="Mika, the Bflyzone mascot" width="72" height="72">
+            </button>
+            <div><p class="mascot-name">Meet Mika <span aria-hidden="true">&#10022;</span></p><span class="commission-status">Commissions open</span></div>
+          </div>
           <h1 id="hero-title">Your idea.<br><span>A few clicks<br class="headline-break"> away.</span></h1>
           <p>A favourite character. A whole new world.<br>Let’s turn your imagination into custom art.</p>
           <a class="button" href="#request">Request a commission <span aria-hidden="true">↗</span></a>
