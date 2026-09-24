@@ -1,127 +1,106 @@
-const form = document.querySelector("#request-form");
-const requestType = document.querySelector("#request-type");
-const emailSubject = document.querySelector("#email-subject");
-const requestSummary = document.querySelector("#request-summary");
-const fallback = document.querySelector("#mailto-fallback");
-const tabs = document.querySelectorAll(".tab");
-const posts = document.querySelectorAll(".post");
-const dialog = document.querySelector("#post-dialog");
-const dialogImage = document.querySelector("#dialog-image");
-const dialogTitle = document.querySelector("#dialog-title");
-const dialogClose = document.querySelector(".dialog-close");
+const form = document.querySelector('#request-form');
+const fallback = document.querySelector('#mailto-fallback');
+const formStatus = document.querySelector('#form-status');
+const dialog = document.querySelector('#post-dialog');
+const requestBar = document.querySelector('#mobile-request-bar');
 
 function fieldValue(id) {
-  return document.querySelector(id)?.value.trim() || "";
-}
-
-function buildEmailBody() {
-  const lines = [
-    `Email: ${fieldValue("#email") || "Not provided"}`,
-    `Request type: ${fieldValue("#request-type") || "Not selected"}`,
-    `Reference link: ${fieldValue("#references") || "Not provided"}`,
-    "",
-    "Message:",
-    fieldValue("#message") || "Not provided",
-  ];
-
-  return lines.join("\n");
+  return document.querySelector(id)?.value.trim() || '';
 }
 
 function syncFormMeta() {
-  const type = requestType.value || "Custom request";
-  emailSubject.value = `New request: ${type}`;
-  requestSummary.value = buildEmailBody();
-  fallback.href = `mailto:bflyzone@gmail.com?subject=${encodeURIComponent(emailSubject.value)}&body=${encodeURIComponent(requestSummary.value)}`;
+  const type = form.querySelector('input[name="Request type"]:checked')?.value || 'Custom request';
+  const subject = `New request: ${type}`;
+  const body = [
+    `Email: ${fieldValue('#email') || 'Not provided'}`,
+    `Request type: ${type}`,
+    `Reference link: ${fieldValue('#references') || 'Not provided'}`,
+    '', 'Message:', fieldValue('#message') || 'Not provided',
+  ].join('\n');
+  document.querySelector('#email-subject').value = subject;
+  document.querySelector('#request-summary').value = body;
+  fallback.href = `mailto:bflyzone@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
 if (form) {
-  form.addEventListener("input", syncFormMeta);
-  form.addEventListener("change", syncFormMeta);
-  syncFormMeta();
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  let sending = false;
+  const message = document.querySelector('#message');
+  const reference = document.querySelector('#references');
+  const referenceDetails = reference.closest('details');
+  // Reveal a collapsed optional field when browser validation needs attention.
+  reference.addEventListener('invalid', () => { referenceDetails.open = true; });
+  form.addEventListener('input', () => {
+    message.setCustomValidity(message.value && !message.value.trim() ? 'Please tell me a little about your idea.' : '');
     syncFormMeta();
-
-    const btn = form.querySelector("button[type=submit]");
-    const originalText = btn.textContent;
-
-    btn.textContent = "Sending…";
-    btn.disabled = true;
-
+  });
+  form.addEventListener('change', syncFormMeta);
+  syncFormMeta();
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (sending || !form.reportValidity()) return;
+    sending = true;
+    syncFormMeta();
+    const button = form.querySelector('button[type="submit"]');
+    button.disabled = true;
+    button.textContent = 'Sending…';
+    form.setAttribute('aria-busy', 'true');
+    formStatus.dataset.state = 'sending';
+    formStatus.textContent = 'Sending your request…';
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
     try {
-      const res = await fetch("https://formsubmit.co/ajax/bflyzone@gmail.com", {
-        method: "POST",
-        body: new FormData(form),
-        headers: { Accept: "application/json" },
+      const response = await fetch('https://formsubmit.co/ajax/bflyzone@gmail.com', {
+        method: 'POST', body: new FormData(form),
+        headers: { Accept: 'application/json' }, signal: controller.signal,
       });
-
-      const data = await res.json();
-
-      if (data.success) {
-        form.reset();
-        syncFormMeta();
-        btn.textContent = "Sent!";
-        setTimeout(() => {
-          btn.textContent = originalText;
-          btn.disabled = false;
-        }, 3000);
-      } else {
-        throw new Error("submission failed");
-      }
+      const data = await response.json();
+      if (!response.ok || (data.success !== true && data.success !== 'true')) throw new Error('Request was not accepted');
+      form.reset();
+      syncFormMeta();
+      referenceDetails.open = false;
+      formStatus.dataset.state = 'success';
+      formStatus.textContent = 'Request sent! I’ll reply by email to discuss your idea, pricing, and timing.';
     } catch {
-      btn.textContent = "Failed — try email instead";
-      btn.disabled = false;
-      setTimeout(() => {
-        btn.textContent = originalText;
-      }, 4000);
+      formStatus.dataset.state = 'error';
+      formStatus.textContent = 'Your request could not be confirmed. Your message is still here. Try again, or choose “Email instead” below to send it from your email app.';
+    } finally {
+      clearTimeout(timeout);
+      sending = false;
+      button.disabled = false;
+      button.textContent = 'Send request ↗';
+      form.removeAttribute('aria-busy');
     }
   });
 }
 
-const requestSection = document.querySelector("#request");
-
-if (requestSection) {
-  document.querySelectorAll('a[href="#request"]').forEach((a) => {
-    a.addEventListener("click", (e) => {
-      e.preventDefault();
-      requestSection.scrollIntoView({ behavior: "smooth" });
-    });
-  });
-
-  if (window.location.hash === "#request") {
-    history.replaceState(null, "", "/");
-    requestSection.scrollIntoView({ behavior: "instant" });
-  }
+// Hide the mobile shortcut while completing the form or previewing artwork.
+if (requestBar && form && 'IntersectionObserver' in window) {
+  let formVisible = false;
+  const updateBar = () => {
+    requestBar.hidden = formVisible || Boolean(dialog?.open) || form.contains(document.activeElement);
+  };
+  new IntersectionObserver(([entry]) => {
+    formVisible = entry.isIntersecting;
+    updateBar();
+  }, { rootMargin: '-76px 0px -90px 0px' }).observe(form);
+  form.addEventListener('focusin', updateBar);
+  form.addEventListener('focusout', () => setTimeout(updateBar, 0));
+  if (dialog) new MutationObserver(updateBar).observe(dialog, { attributes: true, attributeFilter: ['open'] });
 }
 
-tabs.forEach((tab) => {
-  tab.addEventListener("click", () => {
-    const filter = tab.dataset.filter;
-
-    tabs.forEach((item) => item.classList.toggle("active", item === tab));
-    posts.forEach((post) => {
-      post.classList.toggle("hidden", filter !== "all" && post.dataset.filter !== filter);
-    });
+document.querySelectorAll('.post').forEach((post) => {
+  post.addEventListener('click', () => {
+    document.querySelector('#dialog-image').src = post.dataset.src;
+    document.querySelector('#dialog-image').alt = post.querySelector('img').alt;
+    document.querySelector('#dialog-title').textContent = post.dataset.title;
+    dialog.showModal();
   });
 });
-
-posts.forEach((post) => {
-  post.addEventListener("click", () => {
-    dialogImage.src = post.dataset.src;
-    dialogImage.alt = post.querySelector("img").alt;
-    dialogTitle.textContent = post.dataset.title;
-    dialog.classList.toggle("clean-preview", post.dataset.clean === "true");
-
-    if (typeof dialog.showModal === "function") {
-      dialog.showModal();
-    }
-  });
-});
-
-dialogClose?.addEventListener("click", () => dialog.close());
-dialog?.addEventListener("click", (event) => {
+document.querySelector('.dialog-close')?.addEventListener('click', () => dialog.close());
+document.querySelector('.dialog-request')?.addEventListener('click', () => dialog.close());
+dialog?.addEventListener('click', (event) => {
   if (event.target === dialog) {
-    dialog.close();
+    const bounds = dialog.getBoundingClientRect();
+    if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
   }
 });
